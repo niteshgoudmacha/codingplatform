@@ -1,10 +1,12 @@
+
 const electron = require('electron');
 
 const { app, BrowserWindow ,Menu, dialog, remote } = electron;
 
 let mainWindow = null;
-let attempt = 3;
+let attempt = 10;
 
+console.log('1');
 function handleClick(event) {
     console.log('User clicked notification ' + event.id + '. Closing it immediately.');
     event.closeNotification();
@@ -15,17 +17,21 @@ function handleClose(event) {
 }
 
 function wait() {
+    console.log('2');
     setTimeout(() => {console.log('waiting 5 secs'); }, 5000);
 }
   
 // listen for app
 app.on('ready', () => {
+
     //create new window
+    console.log('ready, 3')
     mainWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: false
         }
     }); 
+    console.log('4');
     // mainWindow.setFullScreen(true);
     //load html
     mainWindow.loadURL('https://www.hackerrank.com/auth/login/smart-interviews');
@@ -35,8 +41,10 @@ app.on('ready', () => {
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     //insert Menu
     Menu.setApplicationMenu(mainMenu);
+    //when blur
+    console.log('5');
     mainWindow.on('blur', () => {
-        isfocused = false;
+        console.log('6');
         const eNotify = require('electron-notify');
         if(attempt == 0) {
             eNotify.notify({
@@ -72,33 +80,23 @@ app.on('ready', () => {
             }, 5000);
         }
         else {        
-            debugger;
+            console.log('7');
+            console.log(remote.getCurrentWindow().id)
             eNotify.notify({
                 title: 'Warning',
                 text: 'Go to Contest tab within 5 sec, if not you will be out of contest',
                 onClickFunc: handleClick,
                 onCloseFunc: handleClose
             });
-            debugger;
-            console.log(dialog.showMessageBox(mainWindow, { 
-                message : "Don't try to switch window", 
-                buttonLabel: "ok",
-                // onClickFunc: handleDialog,
-                // onCloseFunc: handleDialog
-            }));
-            debugger;
-            async () => {
-                debugger;
-                await wait();
-                debugger;
-                console.log("settimeout 3 2");
-                debugger;
-            }
-            debugger;
-            console.log(window.isfocused(),'== true')
-            if(!window.isfocused()) {
-                app.quit();
-            }
+        
+            // console.log(dialog.showMessageBox(mainWindow, { 
+            //     message : "Don't try to switch window", 
+            //     buttonLabel: "ok",
+            //     // onClickFunc: handleDialog,
+            //     // onCloseFunc: handleDialog
+            // }));
+    
+        
         }
         attempt = attempt - 1;
         console.log('blur');
