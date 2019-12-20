@@ -21,6 +21,7 @@
     "nodemon": "^1.19.1"
   },
   "devDependencies": {
-    "electron-packager": "^14.0.4"
+    "electron-packager": "^14.0.4",
+    "lodash": "^4.17.15"
   }
 }
